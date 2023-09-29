@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-x+hlabr82)0gfep+bo%6nsehz_n%5_w4*9u*pd9tllw10dj1s1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = "ja"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "Asia/Tokyo"
 
@@ -124,3 +124,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "accounts.User"
