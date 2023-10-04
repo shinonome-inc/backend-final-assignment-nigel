@@ -1,7 +1,8 @@
+from typing import Any
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View
-
+from django.views.generic import CreateView, ListView
+from .models import User
 from .forms import SignupForm
 
 
@@ -19,5 +20,9 @@ class SignupView(CreateView):
         return response
 
 
-class UserProfileView(View):
+class UserProfileView(ListView):
+    model = User
     template_name = "accounts/user_profile.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        return super().get_context_data(**kwargs)
