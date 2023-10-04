@@ -12,7 +12,7 @@
       <ul>
         <li><a href="{% url 'welcome:welcome' %}">Twitter Clone</a></li>
         {% if user.is_authenticated %}
-        Hi {{ user.username }}
+        <li><a href="{% url 'accounts:user_profile' username=request.user %}">{{user.username}}</a></li>
         <li><a href="{% url 'accounts:logout' %}">Log out</a></li>
         {% else %}
         <li><a href="{% url 'accounts:signup' %}">Sign up</a></li>
