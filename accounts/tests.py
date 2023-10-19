@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import SESSION_KEY, get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -23,7 +24,7 @@ class TestSignupView(TestCase):
         }
         response = self.client.post(self.url, valid_data)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("tweets:home"), status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse(settings.LOGIN_REDIRECT_URL), status_code=302, target_status_code=200)
         self.assertTrue(User.objects.filter(username=valid_data["username"]).exists())
         self.assertIn(SESSION_KEY, self.client.session)
 
@@ -222,7 +223,7 @@ class TestLogoutView(TestCase):
 
     def test_success_post(self):
         response = self.client.post(reverse("accounts:logout"))
-        self.assertRedirects(response, reverse("accounts:login"), status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse(settings.LOGOUT_REDIRECT_URL), status_code=302, target_status_code=200)
         self.assertNotIn(SESSION_KEY, self.client.session)
 
 
