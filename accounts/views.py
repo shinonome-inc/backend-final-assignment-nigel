@@ -1,10 +1,12 @@
 from typing import Any
+
+from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
-from .models import User
+
 from .forms import SignupForm
-from django.conf import settings
+from .models import User
 
 
 class SignupView(CreateView):
