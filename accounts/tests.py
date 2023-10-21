@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import SESSION_KEY, get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -23,7 +24,7 @@ class TestSignupView(TestCase):
         }
         response = self.client.post(self.url, valid_data)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("tweets:home"), status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse(settings.LOGIN_REDIRECT_URL), status_code=302, target_status_code=200)
         self.assertTrue(User.objects.filter(username=valid_data["username"]).exists())
         self.assertIn(SESSION_KEY, self.client.session)
 
@@ -172,18 +173,58 @@ class TestSignupView(TestCase):
         self.assertIn("The two password fields didn’t match.", form.errors["password2"])
 
 
-# class TestLoginView(TestCase):
-#     def test_success_get(self):
+class TestLoginView(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="tester", password="testpassword")
+        self.url = reverse("accounts:login")
 
-#     def test_success_post(self):
+    def test_success_get(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
 
-#     def test_failure_post_with_not_exists_user(self):
+    def test_success_post(self):
+        valid_data = {
+            "username": "tester",
+            "password": "testpassword",
+        }
+        response = self.client.post(self.url, valid_data)
+        self.assertRedirects(response, reverse("tweets:home"), status_code=302, target_status_code=200)
+        self.assertIn(SESSION_KEY, self.client.session)
 
-#     def test_failure_post_with_empty_password(self):
+    def test_failure_post_with_not_exists_user(self):
+        invalid_data = {
+            "username": "test",
+            "password": "testpassword",
+        }
+        response = self.client.post(self.url, invalid_data)
+        form = response.context["form"]
+        self.assertIn(
+            "Please enter a correct username and password. Note that both fields may be case-sensitive.",
+            form.errors["__all__"],
+        )
+
+    def test_failure_post_with_empty_password(self):
+        invalid_data = {
+            "username": "tester",
+            "password": "",
+        }
+        response = self.client.post(self.url, invalid_data)
+        form = response.context["form"]
+        self.assertIn(
+            "This field is required.",
+            form.errors["password"],
+        )
 
 
-# class TestLogoutView(TestCase):
-#     def test_success_post(self):
+class TestLogoutView(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="tester", password="testpassword")
+        self.client.login(username="tester", password="testpassword")
+
+    def test_success_post(self):
+        response = self.client.post(reverse("accounts:logout"))
+        self.assertRedirects(response, reverse(settings.LOGOUT_REDIRECT_URL), status_code=302, target_status_code=200)
+        self.assertNotIn(SESSION_KEY, self.client.session)
 
 
 # class TestUserProfileView(TestCase):
