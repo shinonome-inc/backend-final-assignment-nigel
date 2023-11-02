@@ -3,4 +3,12 @@
 
 {% block content%}
 <h1>Home</h1>
+
+{% for tweet in object_list %}
+<div class="tweet">
+    {{ tweet.text }}
+    {{ tweet.timestamp }}
+    {{ tweet.author }}
+</div>
+{% endfor %}
 {% endblock %}
