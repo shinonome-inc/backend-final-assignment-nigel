@@ -1,10 +1,16 @@
 from django import forms
-from django.contrib.auth import get_user_model
 
-Tweet = get_user_model()
+from .models import Tweet
 
 
-class CreateTweetForm(forms.Form):
+class CreateTweetForm(forms.ModelForm):
     class Meta:
         model = Tweet
-        fields = ("text", "timestamp", "author")
+        fields = ["text"]
+
+    def save(self, commit=True):
+        tweet = super().save(commit=False)
+        tweet.author = self.instance.user  # Set the author to the current user
+        if commit:
+            tweet.save()
+        return tweet
