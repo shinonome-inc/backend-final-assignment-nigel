@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
+from tweets.models import Tweet
+
 from .forms import SignupForm
 from .models import User
 
@@ -24,8 +26,12 @@ class SignupView(CreateView):
 
 
 class UserProfileView(ListView):
-    model = User
+    tweet = Tweet
+    user = User
     template_name = "accounts/user_profile.html"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        return Tweet.objects.order_by("-timestamp")

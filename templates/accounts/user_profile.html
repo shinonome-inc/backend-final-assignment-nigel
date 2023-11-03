@@ -2,6 +2,19 @@
 {% block title %}User Profile{% endblock %}
 {% block content %}
 
-<h1>User Profile</h1>
+<h1>Profile</h1>
 <p>User : {{user.username}}</p>
+
+{% for tweet in object_list %}
+<div class="tweet">
+    {% with is_author=tweet.author.username %}
+    {% if is_author == user.username %}
+    {{ tweet.text }}
+    {{ tweet.timestamp }}
+    {{ tweet.author }}
+    {% endif %}
+    {% endwith %}
+</div>
+{% endfor %}
+
 {% endblock %}
