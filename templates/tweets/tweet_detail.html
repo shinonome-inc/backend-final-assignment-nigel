@@ -7,6 +7,8 @@
     {{ tweet.text }}
     {{ tweet.timestamp }}
     {{ tweet.author }}
+    <a href="{% url 'tweets:delete' pk=tweet.id%}">Delete</a>
+    </form>
 </div>
 
 

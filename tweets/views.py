@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView
 
 from .forms import CreateTweetForm
 from .models import Tweet
@@ -34,3 +34,9 @@ class TweetDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         return Tweet.objects.get(id=self.kwargs["pk"])
+
+
+class TweetDeleteView(DeleteView):
+    model = Tweet
+    success_url = reverse_lazy("tweets:home")
+    template = "tweets/tweet_confirm_delete.html"
