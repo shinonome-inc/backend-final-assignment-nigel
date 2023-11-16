@@ -234,13 +234,18 @@ class TestUserProfileView(TestCase):
         self.user = User.objects.create_user(username="tester", password="testpassword")
         self.client.login(username="tester", password="testpassword")
         self.url = reverse("accounts:user_profile", args=[self.user])
+        self.tempuser = User.objects.create_user(username="testing", password="testpassword")
 
     def test_success_get(self):
-        [Tweet.objects.create(text=f"test{i}", author=self.user) for i in range(0, 5)]
+        [Tweet.objects.create(text=f"testdiff{i}", author=self.tempuser) for i in range(1, 10)]
+        [Tweet.objects.create(text=f"test{i}", author=self.user) for i in range(1, 5)]
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "accounts/user_profile.html")
-        self.assertQuerysetEqual(Tweet.objects.all().order_by("-timestamp"), response.context["tweet_list"])
+        self.assertQuerysetEqual(
+            Tweet.objects.filter(author=self.user).order_by("-timestamp"), response.context["tweets"]
+        )
+        print(Tweet.objects.filter(author=self.user).order_by("-timestamp"), "\n\n", response.context["tweets"])
 
 
 # class TestUserProfileEditView(TestCase):

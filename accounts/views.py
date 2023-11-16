@@ -31,7 +31,8 @@ class UserProfileView(ListView):
     slug_field = "username"
 
     def get_queryset(self):
-        return Tweet.objects.filter(user=self.object)
+        user = User.objects.get(username=self.kwargs["username"])
+        return Tweet.objects.filter(author=user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
