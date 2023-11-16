@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from tweets.models import Tweet
+
 User = get_user_model()
 
 
@@ -12,9 +14,11 @@ class TestHomeView(TestCase):
         self.client.login(username="tester", password="testpassword")
 
     def test_success_get(self):
+        [Tweet.objects.create(text=f"test{i}", author=self.user) for i in range(0, 5)]
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tweets/home.html")
+        self.assertQuerysetEqual(Tweet.objects.all().order_by("-timestamp"), response.context["tweet_list"])
 
 
 # class TestTweetCreateView(TestCase):

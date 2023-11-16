@@ -1,5 +1,3 @@
-from typing import Any
-
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
@@ -27,11 +25,15 @@ class SignupView(CreateView):
 
 class UserProfileView(ListView):
     tweet = Tweet
-    user = User
+    model = User
     template_name = "accounts/user_profile.html"
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        return super().get_context_data(**kwargs)
+    context_object_name = "user_profile"
+    slug_field = "username"
 
     def get_queryset(self):
-        return Tweet.objects.order_by("-timestamp")
+        return Tweet.objects.filter(user=self.object)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tweets"] = self.get_queryset()
+        return context
