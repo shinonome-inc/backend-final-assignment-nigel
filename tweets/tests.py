@@ -94,8 +94,12 @@ class TestTweetDeleteView(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertFalse(Tweet.objects.filter(id=10).exists())
 
-
-#     def test_failure_post_with_incorrect_user(self):
+    def test_failure_post_with_incorrect_user(self):
+        self.user = User.objects.create_user(username="admin", password="testpassword")
+        self.client.login(username="admin", password="testpassword")
+        response = self.client.post(reverse("tweets:delete", args=[self.test_id]))
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(Tweet.objects.filter(id=10).exists())
 
 
 # class TestLikeView(TestCase):
