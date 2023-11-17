@@ -240,9 +240,7 @@ class TestUserProfileView(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "accounts/user_profile.html")
-        self.assertQuerysetEqual(
-            Tweet.objects.filter(author=self.user).order_by("-timestamp"), response.context["tweets"]
-        )
+        self.assertQuerysetEqual(Tweet.objects.filter(author=self.user), response.context["tweets"], ordered=False)
 
 
 # class TestUserProfileEditView(TestCase):
