@@ -234,10 +234,8 @@ class TestUserProfileView(TestCase):
         self.user = User.objects.create_user(username="tester", password="testpassword")
         self.client.login(username="tester", password="testpassword")
         self.url = reverse("accounts:user_profile", args=[self.user])
-        self.tempuser = User.objects.create_user(username="testing", password="testpassword")
 
     def test_success_get(self):
-        [Tweet.objects.create(text=f"testdiff{i}", author=self.tempuser) for i in range(1, 10)]
         [Tweet.objects.create(text=f"test{i}", author=self.user) for i in range(1, 5)]
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
