@@ -7,8 +7,9 @@
     {{ tweet.text }}
     {{ tweet.timestamp }}
     {{ tweet.author }}
+    {% if user.is_authenticated and user == tweet.author %}
     <a href="{% url 'tweets:delete' pk=tweet.id%}">Delete</a>
-    </form>
+    {% endif %}
 </div>
 
 
