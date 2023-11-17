@@ -245,7 +245,6 @@ class TestUserProfileView(TestCase):
         self.assertQuerysetEqual(
             Tweet.objects.filter(author=self.user).order_by("-timestamp"), response.context["tweets"]
         )
-        print(Tweet.objects.filter(author=self.user).order_by("-timestamp"), "\n\n", response.context["tweets"])
 
 
 # class TestUserProfileEditView(TestCase):
