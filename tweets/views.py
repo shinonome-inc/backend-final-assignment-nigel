@@ -10,7 +10,7 @@ class HomeView(LoginRequiredMixin, ListView):
     template_name = "tweets/home.html"
 
     def get_queryset(self):
-        return Tweet.objects.order_by("-created_at")
+        return Tweet.objects.select_related("author").order_by("-created_at")
 
 
 class TweetCreateView(LoginRequiredMixin, CreateView):
