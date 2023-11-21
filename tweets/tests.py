@@ -20,7 +20,7 @@ class TestHomeView(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tweets/home.html")
-        self.assertQuerysetEqual(Tweet.objects.all().order_by("-timestamp"), response.context["tweet_list"])
+        self.assertQuerysetEqual(Tweet.objects.all().order_by("-created_at"), response.context["tweet_list"])
 
 
 class TestTweetCreateView(TestCase):
