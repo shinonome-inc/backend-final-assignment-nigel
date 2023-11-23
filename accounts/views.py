@@ -24,10 +24,8 @@ class SignupView(CreateView):
 
 
 class UserProfileView(ListView):
-    tweet = Tweet
     model = User
     template_name = "accounts/user_profile.html"
-    context_object_name = "user_profile"
     slug_field = "username"
 
     def get_queryset(self):
@@ -37,4 +35,5 @@ class UserProfileView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["tweets"] = self.get_queryset()
+        context["user_profile"] = self.kwargs["username"]
         return context
