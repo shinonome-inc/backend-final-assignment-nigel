@@ -3,15 +3,13 @@
 {% block content %}
 
 <h1>Profile</h1>
-<p>User : {{user_profile}}</p>
+<p>User : {{user_profile.username}}</p>
 
-{% for tweet in object_list %}
+{% for tweet in tweets %}
 <div class="tweet">
-    {% if tweet.author.username == user_profile %}
     {{ tweet.text }}
     {{ tweet.timestamp }}
     {{ tweet.author }}
-    {% endif %}
 </div>
 {% endfor %}
 

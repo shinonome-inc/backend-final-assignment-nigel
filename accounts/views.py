@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
@@ -28,12 +30,8 @@ class UserProfileView(ListView):
     template_name = "accounts/user_profile.html"
     slug_field = "username"
 
-    def get_queryset(self):
-        user = User.objects.get(username=self.kwargs["username"])
-        return Tweet.objects.filter(author=user)
-
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["tweets"] = self.get_queryset()
-        context["user_profile"] = self.kwargs["username"]
+        context["user_profile"] = User.objects.get(username=self.kwargs["username"])
+        context["tweets"] = Tweet.objects.filter(author=context["user_profile"])
         return context
