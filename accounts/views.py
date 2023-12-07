@@ -3,7 +3,7 @@ from typing import Any
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, TemplateView
 
 from tweets.models import Tweet
 
@@ -25,7 +25,7 @@ class SignupView(CreateView):
         return response
 
 
-class UserProfileView(ListView):
+class UserProfileView(TemplateView):
     model = User
     template_name = "accounts/user_profile.html"
     slug_field = "username"
