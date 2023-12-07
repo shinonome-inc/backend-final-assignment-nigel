@@ -32,6 +32,7 @@ class UserProfileView(ListView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["user_profile"] = User.objects.get(username=self.kwargs["username"])
-        context["tweets"] = Tweet.objects.filter(author=context["user_profile"])
+        user = User.objects.get(username=self.kwargs["username"])
+        context["user_profile"] = user
+        context["tweets"] = Tweet.objects.filter(author=user)
         return context
