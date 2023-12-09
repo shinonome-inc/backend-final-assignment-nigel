@@ -10,7 +10,7 @@
   <header class="mb-3">
     <nav>
       <ul>
-        <li><a href="{% url 'welcome:welcome' %}">Twitter Clone</a></li>
+        <li><a href="{% url 'tweets:home' %}">Twitter Clone</a></li>
         {% if user.is_authenticated %}
         <li><a href="{% url 'accounts:user_profile' username=request.user %}">{{user.username}}</a></li>
         <li><a href="{% url 'accounts:logout' %}">Log out</a></li>

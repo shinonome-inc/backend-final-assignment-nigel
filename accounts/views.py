@@ -3,7 +3,9 @@ from typing import Any
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, TemplateView
+
+from tweets.models import Tweet
 
 from .forms import SignupForm
 from .models import User
@@ -23,9 +25,14 @@ class SignupView(CreateView):
         return response
 
 
-class UserProfileView(ListView):
+class UserProfileView(TemplateView):
     model = User
     template_name = "accounts/user_profile.html"
+    slug_field = "username"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        return super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(username=self.kwargs["username"])
+        context["user_profile"] = user
+        context["tweets"] = Tweet.objects.filter(author=user)
+        return context
